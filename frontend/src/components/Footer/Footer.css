@@ -51,3 +51,14 @@
   background-color: gray;
   border: none;
 }
+
+@media (max-width: 750px) {
+  .Footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+  }
+  .Footer-copyright {
+    text-align: center;
+  }
+}
