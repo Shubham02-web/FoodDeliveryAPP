@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 export const ConnectMongo = async () => {
   await mongoose
-    .connect("mongodb://localhost:27017/FoodDelivery")
+    .connect(process.env.MONGODBLINK)
     .then(() => {
       console.log("DataBase Connected Succefully");
     })

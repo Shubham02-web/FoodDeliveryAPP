@@ -2,10 +2,11 @@ import express from "express";
 import cors from "cors";
 import { ConnectMongo } from "./config/db.js";
 import foodRouter from "./routes/FoodRoutes.js";
+import dotenv from "dotenv";
 // app config
 const app = express();
-const port = 4000;
-
+dotenv.config();
+const PORT = process.env.PORT;
 // middlewares
 app.use(express.json());
 app.use(cors());
@@ -15,10 +16,10 @@ ConnectMongo();
 
 // api endpoints
 app.use("/api/food", foodRouter);
-
+app.use("/image", express.static("uploads"));
 app.get("/", (req, res) => {
   res.send("API Working");
 });
-app.listen(port, () => {
-  console.log(`server started on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`server started on http://localhost:${PORT}`);
 });
