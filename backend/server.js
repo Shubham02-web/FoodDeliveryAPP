@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { ConnectMongo } from "./config/db.js";
 import foodRouter from "./routes/FoodRoutes.js";
+import userRouter from "./routes/UserRoutes.js";
 import dotenv from "dotenv";
 // app config
 const app = express();
@@ -16,6 +17,7 @@ ConnectMongo();
 
 // api endpoints
 app.use("/api/food", foodRouter);
+app.use("/api/user", userRouter);
 app.use("/image", express.static("uploads"));
 app.get("/", (req, res) => {
   res.send("API Working");
