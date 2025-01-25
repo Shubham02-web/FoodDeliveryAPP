@@ -20,8 +20,8 @@ app.use("/api/food", foodRouter);
 app.use("/api/user", userRouter);
 app.use("/image", express.static("uploads"));
 app.get("/", (req, res) => {
-  res.send("API Working");
+    res.send("API Working");
 });
 app.listen(PORT, () => {
-  console.log(`server started on http://localhost:${PORT}`);
+    console.log(`server started on http://localhost:${PORT}`);
 });
