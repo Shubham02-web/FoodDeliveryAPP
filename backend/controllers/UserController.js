@@ -4,12 +4,45 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import userModel from "../models/UserModels.js";
 
-// login User
-const loginUser = async(req, res) => {};
-
 // creating Token
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET_KEY);
+};
+
+// login User
+const loginUser = async(req, res) => {
+    const { email, password } = req.body;
+    if (!email)
+        return res.json({ success: false, message: "Please Enter email " });
+    if (!password)
+        return res.json({ success: false, message: "please enter password" });
+    try {
+        const user = await userModel.findOne({ email });
+        if (!user)
+            return res.status(404).json({
+                success: false,
+                message: "user not found for these email",
+            });
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch)
+            return res.status(401).json({
+                success: false,
+                message: "Wrong Password",
+            });
+        const token = createToken(user._id);
+        return res.status(200).json({
+            success: true,
+            user,
+            token,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Error in Login API",
+        });
+    }
 };
 
 // Register User
