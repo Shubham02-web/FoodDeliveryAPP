@@ -58,6 +58,11 @@ const Orders = ({ url }) => {
             </div>
             <p>Items:{order.items.length}</p>
             <p>${order.amount}</p>
+            <select>
+              <option value="Food Processing">Food Processing</option>
+              <option value="Out For Delivery">Out For Delivery</option>
+              <option value="Deliverd">Deliverd</option>
+            </select>
           </div>
         ))}
       </div>
