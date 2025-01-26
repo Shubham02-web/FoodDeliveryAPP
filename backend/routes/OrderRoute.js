@@ -4,11 +4,13 @@ import {
   placeOrder,
   userOrder,
   verifyOrder,
+  listOrders,
 } from "../controllers/OrderController.js";
 
 const orderRouter = express.Router();
 orderRouter.post("/place", authMiddleware, placeOrder);
 orderRouter.post("/verify", verifyOrder);
 orderRouter.post("/userorder", authMiddleware, userOrder);
+orderRouter.get("/list", listOrders);
 
 export default orderRouter;
