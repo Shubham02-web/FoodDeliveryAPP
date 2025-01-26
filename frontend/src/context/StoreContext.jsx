@@ -19,7 +19,7 @@ const StoreContextProvider = ({ children }) => {
       );
     }
   };
-  const url = "http://localhost:4000";
+  const url = import.meta.env.VITE_API_URL;
   const removeFromCart = async (itemId) => {
     setCartItems((prev) => {
       const updatedCart = { ...prev };
