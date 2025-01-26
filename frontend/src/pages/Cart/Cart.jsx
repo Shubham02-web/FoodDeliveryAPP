@@ -25,7 +25,7 @@ const Cart = () => {
               <div key={index}>
                 <div className="cart-items-title cart-items-item">
                   <img src={url + "/image/" + item.image} alt="item image" />
-                  <p>{item.name}</p>
+                  <p>{item.Name}</p>
                   <p>${item.price}</p>
                   <p>{cartItems[item._id]}</p>
                   <p>${item.price * cartItems[item._id]}</p>

@@ -1,17 +1,17 @@
+import { CurrencyCodes } from "validator/lib/isISO4217.js";
 import orderModel from "../models/OrderModel.js";
 import userModel from "../models/UserModels.js";
 import Stripe from "stripe";
+import dotenv from "dotenv";
+dotenv.config();
 
-// console.log(process.env.STRIPE_SECRET_KEY);
-// Initialize Stripe with the secret key from environment variables
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Placing user order for frontend API
+// placing user order for frontend API
 const placeOrder = async(req, res) => {
     const frontend_url = "http://localhost:5173";
 
     try {
-        // Create a new order
         const newOrder = new orderModel({
             userId: req.body.userId,
             items: req.body.items,
@@ -19,35 +19,30 @@ const placeOrder = async(req, res) => {
             address: req.body.address,
         });
         await newOrder.save();
-
-        // Clear the user's cart
         await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
-
-        // Prepare line items for Stripe checkout
+        console.log(req.body.items);
         const line_items = req.body.items.map((item) => ({
             price_data: {
                 currency: "inr",
                 product_data: {
                     name: item.name,
                 },
-                unit_amount: item.price * 100, // Convert to cents
+                unit_amount: item.price * 100 * 80,
             },
             quantity: item.quantity,
         }));
 
-        // Add delivery charges to line items
         line_items.push({
             price_data: {
                 currency: "inr",
                 product_data: {
                     name: "Delivery Charges",
                 },
-                unit_amount: 2 * 100, // Convert to cents
+                unit_amount: 2 * 100 * 80,
             },
             quantity: 1,
         });
 
-        // Create a Stripe checkout session
         const session = await stripe.checkout.sessions.create({
             line_items: line_items,
             mode: "payment",
@@ -55,17 +50,13 @@ const placeOrder = async(req, res) => {
             cancel_url: `${frontend_url}/verify?success=false&orderId=${newOrder._id}`,
         });
 
-        // Return the session URL to the frontend
         res.status(200).json({
             success: true,
             session_url: session.url,
         });
     } catch (error) {
-        console.error("Error in placeOrder:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error in Place Order API",
-        });
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message });
     }
 };
 
