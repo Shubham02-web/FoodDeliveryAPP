@@ -114,4 +114,6 @@ const listOrders = async (req, res) => {
   }
 };
 
-export { placeOrder, verifyOrder, userOrder, listOrders };
+const updateController = async (req, res) => {};
+
+export { placeOrder, verifyOrder, userOrder, listOrders, updateController };
