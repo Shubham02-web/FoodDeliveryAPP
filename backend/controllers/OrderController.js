@@ -1,4 +1,3 @@
-import { CurrencyCodes } from "validator/lib/isISO4217.js";
 import orderModel from "../models/OrderModel.js";
 import userModel from "../models/UserModels.js";
 import Stripe from "stripe";
@@ -114,6 +113,19 @@ const listOrders = async (req, res) => {
   }
 };
 
-const updateController = async (req, res) => {};
+const updateController = async (req, res) => {
+  try {
+    const response = await orderModel.findByIdAndUpdate(req.body.orderId, {
+      status: req.body.status,
+    });
+    res.status(200).json({
+      success: true,
+      message: "Status Updated",
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Error" });
+  }
+};
 
 export { placeOrder, verifyOrder, userOrder, listOrders, updateController };
